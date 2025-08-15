@@ -4,34 +4,46 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return jsonify({"message": "Welcome to the Calculator API!"})
+    return "Welcome to the Calculator API!"
 
 @app.route('/add', methods=['GET'])
 def add():
-    a = float(request.args.get('a', 0))
-    b = float(request.args.get('b', 0))
-    return jsonify({"operation": "addition", "a": a, "b": b, "result": a + b})
+    try:
+        a = float(request.args.get('a'))
+        b = float(request.args.get('b'))
+        return jsonify({"result": a + b})
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid inputs"}), 400
 
 @app.route('/subtract', methods=['GET'])
 def subtract():
-    a = float(request.args.get('a', 0))
-    b = float(request.args.get('b', 0))
-    return jsonify({"operation": "subtraction", "a": a, "b": b, "result": a - b})
+    try:
+        a = float(request.args.get('a'))
+        b = float(request.args.get('b'))
+        return jsonify({"result": a - b})
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid inputs"}), 400
 
 @app.route('/multiply', methods=['GET'])
 def multiply():
-    a = float(request.args.get('a', 0))
-    b = float(request.args.get('b', 0))
-    return jsonify({"operation": "multiplication", "a": a, "b": b, "result": a * b})
+    try:
+        a = float(request.args.get('a'))
+        b = float(request.args.get('b'))
+        return jsonify({"result": a * b})
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid inputs"}), 400
 
 @app.route('/divide', methods=['GET'])
 def divide():
-    a = float(request.args.get('a', 0))
-    b = float(request.args.get('b', 1))
-    if b == 0:
-        return jsonify({"error": "Division by zero not allowed"}), 400
-    return jsonify({"operation": "division", "a": a, "b": b, "result": a / b})
+    try:
+        a = float(request.args.get('a'))
+        b = float(request.args.get('b'))
+        if b == 0:
+            return jsonify({"error": "Division by zero"}), 400
+        return jsonify({"result": a / b})
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid inputs"}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
 
